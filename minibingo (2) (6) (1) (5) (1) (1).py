@@ -1,4 +1,3 @@
-# noinspection PyInterpreter
 import contextlib
 import random
 
@@ -56,14 +55,10 @@ class Card(object):
 
     def hits(self, draw):
         """List of booleans indicating whether each cell's number is part of the 'draw'."""
-        # TODO: rever o código
-
         card_hits = []
         for num in self.nums:
             card_hits.append(num in draw)
-
         return card_hits
-
 
 class Prize(object):
     def __init__(self, value, mask):
@@ -73,19 +68,18 @@ class Prize(object):
     def __repr__(self):
         return "{} (value={})".format(mask_to_str(self.mask), self.value)
 
+
     def check(self, card_hits):
         """True iff the given 'card_hits' list contains this prize."""
-        # TODO: rever o código
-        """I need to receive the info about card hits and verify with the PRIZES(the mask of the Prizes, who already are a bool, to return if has a prize or not."""
-
         index = 0
         for value in self.mask:
+            # The condition analizes if the value is True. If 'value' is true, then it compares with the card hits.
+            # If 'value' is False, there's no need to compare it with card_hits, because what is needed are the same
+            # ocurrences of True on the same positions.
             if value and not card_hits[index]:
                 return False
             index += 1
-
         return True
-
 
 class Game(object):
     def __init__(self, prizes=()):
@@ -113,9 +107,6 @@ class Player(object):
 
     def check_cards(self, nums):
         """Verify prizes against all cards and return an iterable of all prizes won."""
-        """return? a iterable with all of the card "checked" by the check_card function"""
-        """does not receive card because the verification on each card its been doing in the check_card function"""
-
         prizes_won = []
         for card in self.cards:
             for prize in self.check_card(card, nums):
@@ -137,11 +128,16 @@ class Player(object):
 
     def place_bet(self, bet):
         log("Placing bet: {}".format(bet))
+        # As describe in the document: "For example, if the player decides to play with 3 cards and place a bet of 5,
+        # the cost of the play will be 3 x 5 = 15."" It uses a negative bet to subtract the bet value from the player
+        # balance.
         self.add_balance(-bet * len(self.cards))
 
-    # TODO rever o codigo
     def award_winnings(self, prize, bet):
         log("Awarding winnings for {} with bet {}.".format(prize, bet))
+        # As describe in the document: "The amount the player wins depends not only on the amount associated with the
+        # prize but also on the amount wagered by the player. For example, on a play with bet 2 and a prize of 20 pays
+        # the player 2 x 20 = 40."
         self.add_balance(prize.value * bet)
 
     def add_balance(self, delta):
