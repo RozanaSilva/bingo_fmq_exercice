@@ -1,2 +1,2 @@
 # bingo_fmq_exercise
-Fabamaq's exercice 
+Fabamaq's exercise 
