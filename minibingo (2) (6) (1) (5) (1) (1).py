@@ -56,7 +56,13 @@ class Card(object):
 
     def hits(self, draw):
         """List of booleans indicating whether each cell's number is part of the 'draw'."""
-        raise NotImplementedError(">>> your code goes here <<<")
+        # TODO: rever o código
+
+        card_hits = []
+        for num in self.nums:
+            card_hits.append(num in draw)
+
+        return card_hits
 
 
 class Prize(object):
@@ -69,7 +75,16 @@ class Prize(object):
 
     def check(self, card_hits):
         """True iff the given 'card_hits' list contains this prize."""
-        raise NotImplementedError(">>> your code goes here <<<")
+        # TODO: rever o código
+        """I need to receive the info about card hits and verify with the PRIZES(the mask of the Prizes, who already are a bool, to return if has a prize or not."""
+
+        index = 0
+        for value in self.mask:
+            if value and not card_hits[index]:
+                return False
+            index += 1
+
+        return True
 
 
 class Game(object):
@@ -98,7 +113,14 @@ class Player(object):
 
     def check_cards(self, nums):
         """Verify prizes against all cards and return an iterable of all prizes won."""
-        raise NotImplementedError(">>> your code goes here <<<")
+        """return? a iterable with all of the card "checked" by the check_card function"""
+        """does not receive card because the verification on each card its been doing in the check_card function"""
+
+        prizes_won = []
+        for card in self.cards:
+            for prize in self.check_card(card, nums):
+                prizes_won.append(prize)
+        return prizes_won
 
     def check_card(self, card, nums):
         """Verify prizes against a given card and return an iterable of all prizes won."""
@@ -115,11 +137,12 @@ class Player(object):
 
     def place_bet(self, bet):
         log("Placing bet: {}".format(bet))
-        raise NotImplementedError(">>> your code goes here <<<")
+        self.add_balance(-bet * len(self.cards))
 
+    # TODO rever o codigo
     def award_winnings(self, prize, bet):
         log("Awarding winnings for {} with bet {}.".format(prize, bet))
-        raise NotImplementedError(">>> your code goes here <<<")
+        self.add_balance(prize.value * bet)
 
     def add_balance(self, delta):
         new_balance = self.balance + delta
